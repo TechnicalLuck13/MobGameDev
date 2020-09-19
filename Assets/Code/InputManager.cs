@@ -12,8 +12,14 @@ public class InputManager : MonoBehaviour
     public Slider powerSlider;
     public bool phoneIsAttached = true;
     public Transform bulletSpawn;
+    public Transform gun;
+    [Tooltip("This is your gun barrel, or your tank")]
     public Rigidbody2D bullet;
+    public GameObject enemyPrefab;
     public float minPower = 50f, maxPower = 200f;
+    public float pause = 0;
+    public Vector2 min, max;
+    [Tooltip("The X and Y min and max enemy spawns.")]
 
     public int score = 0;
 
@@ -24,6 +30,7 @@ public class InputManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        StartCoroutine(SpawnEnemy());
         debugText.text = "Input Mgr Connected!";
         timer = minPower;
     }
@@ -76,5 +83,19 @@ public class InputManager : MonoBehaviour
     public void UpdateScore(int givenScore){
         score += givenScore;
         scoreText.text = "Score: " + score.ToString();
+    }
+    public void RotateGun(int dir){
+        gun.transform.Rotate(0, 0, dir * 5);
+    }
+
+    public IEnumerator SpawnEnemy() {
+        yield return new WaitForSeconds(5);
+        int totalEnemies = Random.Range(4, 9);
+        for(int i = 0; i< totalEnemies; i += 1){
+            GameObject newEnemy = Instantiate(enemyPrefab);
+            newEnemy.transform.position = new Vector2(Random.Range(min.x, max.x), Random.Range(min.y, max.y));
+        }    
+        StartCoroutine(SpawnEnemy());
+        
     }
 }
