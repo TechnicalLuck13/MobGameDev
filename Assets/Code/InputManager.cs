@@ -7,11 +7,15 @@ using TMPro;
 public class InputManager : MonoBehaviour
 {
     public TextMeshProUGUI debugText;
+    public TextMeshProUGUI scoreText;
+
     public Slider powerSlider;
     public bool phoneIsAttached = true;
     public Transform bulletSpawn;
     public Rigidbody2D bullet;
     public float minPower = 50f, maxPower = 200f;
+
+    public int score = 0;
 
     //these should be private
     public float timer = 0;
@@ -67,5 +71,10 @@ public class InputManager : MonoBehaviour
         rb.AddRelativeForce(Vector2.up * 10 * timer);
         timer = minPower;
         powerSlider.value = timer;
+    }
+
+    public void UpdateScore(int givenScore){
+        score += givenScore;
+        scoreText.text = "Score: " + score.ToString();
     }
 }
